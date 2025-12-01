@@ -1,0 +1,176 @@
+"use client";
+
+import Link from 'next/link';
+import { PromptItem } from '@/lib/types';
+import { useToast } from '@/context/ToastContext';
+import { useAuth } from '@/context/AuthContext';
+
+interface PromptCardProps {
+  data: PromptItem;
+  isManageMode: boolean;
+  isSelected: boolean;
+  onToggleSelect: (id: string | number) => void;
+  onEdit?: (prompt: PromptItem) => void; 
+}
+
+export default function PromptCard({ data, isManageMode, isSelected, onToggleSelect, onEdit }: PromptCardProps) {
+  const { showToast } = useToast();
+  const { canEdit: checkCanEdit } = useAuth();
+
+  const handleCopy = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText(data.prompt);
+    showToast('已复制到剪贴板！');
+  };
+
+  const handleSelect = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    onToggleSelect(data.id);
+  };
+
+  const handleEditClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (onEdit) onEdit(data);
+  };
+
+  // 格式化创建时间
+  const formatDate = (timestamp?: number) => {
+    if (!timestamp) return '未知';
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // 生成随机数据用于展示 UI 效果 (Mock Data)
+  const randomViews = Math.floor(Math.random() * 500) + 50;
+  const randomDownloads = Math.floor(Math.random() * 20);
+  
+  // Complexity UI Logic
+  const complexityLevel = data.complexity || 'beginner';
+  const levelLabels = {
+      'beginner': '初级',
+      'intermediate': '中级',
+      'advanced': '高级'
+  };
+  const levelColor = complexityLevel === 'beginner' ? 'bg-yellow-500 text-black' : (complexityLevel === 'intermediate' ? 'bg-blue-500 text-white' : 'bg-red-500 text-white');
+
+  // 权限检查：管理员可以编辑所有，普通用户只能编辑自己创建的
+  const canEdit = checkCanEdit(data.isCustom);
+
+  return (
+    <div 
+        className={`group relative bg-[#111] border rounded-xl flex flex-col h-full overflow-hidden transition-all duration-300 hover:border-zinc-600 hover:shadow-lg hover:shadow-purple-900/10 ${
+            isSelected ? 'border-purple-500 ring-1 ring-purple-500' : 'border-zinc-800'
+        }`}
+    >
+      
+      {/* Manage Mode Overlay */}
+      {isManageMode && (
+        <div className="absolute inset-0 z-20 bg-black/60 backdrop-blur-[1px] cursor-pointer flex items-start justify-end p-3" onClick={handleSelect}>
+            <input 
+              type="checkbox" 
+              checked={isSelected} 
+              readOnly 
+              className="w-5 h-5 rounded border-zinc-500 text-purple-600 focus:ring-purple-500 cursor-pointer"
+            />
+        </div>
+      )}
+
+      <Link href={`/prompts/${data.id}`} className="flex-grow flex flex-col">
+        
+        {/* Top: Preview Image Area */}
+        <div className="h-40 w-full bg-zinc-900 relative overflow-hidden border-b border-zinc-800">
+            {data.type === 'image' && data.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={data.image} alt={data.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
+            ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-900">
+                    <i className={`${data.icon || 'fa-solid fa-bolt'} text-4xl text-zinc-700 group-hover:text-zinc-500 transition-colors`}></i>
+                </div>
+            )}
+            
+            {/* Floating Tags */}
+            <div className="absolute top-3 left-3 flex gap-2">
+                <span className={`px-2 py-0.5 text-[10px] font-bold rounded ${levelColor}`}>
+                    {levelLabels[complexityLevel]}
+                </span>
+                <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-zinc-800/80 text-gray-300 border border-zinc-700 backdrop-blur-sm">
+                    AI智能
+                </span>
+            </div>
+        </div>
+
+        {/* Middle: Content Info */}
+        <div className="p-5 flex-grow flex flex-col">
+          <h3 className="text-base font-bold text-gray-100 mb-2 line-clamp-1 group-hover:text-purple-400 transition-colors">
+            {data.title}
+          </h3>
+          
+          <div className="flex items-center gap-2 mb-3">
+             <i className="fa-brands fa-hotjar text-red-500 text-xs"></i>
+             <span className="text-xs text-gray-500">功能概述</span>
+          </div>
+
+          <p className="text-gray-500 text-xs line-clamp-3 leading-relaxed mb-4 flex-grow">
+            {data.desc || data.prompt}
+          </p>
+
+          {/* Tags */}
+          <div className="flex gap-2 mb-2">
+              <span className="px-2 py-1 bg-zinc-900 text-zinc-400 text-xs rounded border border-zinc-800">
+                  {data.category}
+              </span>
+              {data.isCustom && (
+                  <span className="px-2 py-1 bg-purple-900/20 text-purple-400 text-xs rounded border border-purple-900/30">
+                      自定义
+                  </span>
+              )}
+          </div>
+        </div>
+      </Link>
+
+      {/* Bottom: Stats & Actions Bar */}
+      <div className="px-5 py-3 border-t border-zinc-800 flex justify-between items-center bg-[#0e0e0e]">
+        
+        {/* Stats */}
+        <div className="flex items-center gap-4 text-xs text-zinc-500">
+            <span className="flex items-center gap-1">
+                <i className="fa-regular fa-calendar"></i> {formatDate(data.createdAt)}
+            </span>
+            <span className="flex items-center gap-1">
+                <i className="fa-regular fa-eye"></i> {randomViews}
+            </span>
+            <span className="flex items-center gap-1">
+                <i className="fa-solid fa-download"></i> {randomDownloads}
+            </span>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-3">
+            {/* Edit Button */}
+            {canEdit && !isManageMode && (
+                <button 
+                    onClick={handleEditClick}
+                    className="text-zinc-500 hover:text-purple-400 transition"
+                    title="编辑"
+                >
+                    <i className="fa-solid fa-pen-to-square"></i>
+                </button>
+            )}
+
+            <button 
+                onClick={handleCopy}
+                className="text-zinc-500 hover:text-purple-400 transition"
+                title="复制 Prompt"
+            >
+                <i className="fa-regular fa-copy"></i>
+            </button>
+        </div>
+      </div>
+    </div>
+  );
+}
