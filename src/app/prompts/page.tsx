@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { usePrompts } from '@/context/PromptContext';
 import { useSiteConfig } from '@/context/SiteConfigContext';
@@ -19,7 +19,7 @@ import ImportModal from '@/components/prompts/ImportModal';
 import Pagination from '@/components/prompts/Pagination';
 import { Category, PromptItem, Complexity } from '@/lib/types';
 
-export default function PromptsPage() {
+function PromptsPageContent() {
   const { prompts, isLoaded } = usePrompts();
   const { config } = useSiteConfig();
   const { canManage, canCreate, isLoggedIn } = useAuth();
@@ -312,5 +312,20 @@ export default function PromptsPage() {
 
       {/* 固定在页尾的分页组件 */}
     </div>
+  );
+}
+
+export default function PromptsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <i className="fa-solid fa-spinner fa-spin text-4xl text-purple-500 mb-4"></i>
+          <p className="text-gray-500">正在加载...</p>
+        </div>
+      </div>
+    }>
+      <PromptsPageContent />
+    </Suspense>
   );
 }
