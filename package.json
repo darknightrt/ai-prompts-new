@@ -9,7 +9,7 @@
     "lint": "next lint",
     "pages:build": "npx @cloudflare/next-on-pages",
     "pages:dev": "npx wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat",
-    "pages:deploy": "pnpm run pages:build && npx wrangler pages deploy .vercel/output/static"
+    "pages:deploy": "npm run pages:build && npx wrangler pages deploy .vercel/output/static"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
