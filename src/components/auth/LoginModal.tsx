@@ -19,7 +19,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === 'admin' && password === '123456') {
+    if (username === 'she' && password === 'yujiahao520') {
       login('Admin', 'admin');
       onClose();
     } else if (username === 'user' && password === '123456') {
