@@ -12,19 +12,14 @@ import {
 } from './storage.types';
 
 export class D1Storage implements IStorage {
-  private db: D1Database | null = null;
-
-  constructor() {
-    // 延迟初始化：不在构造函数中访问 DB
-    // DB 绑定只在运行时可用，构建时不存在
-  }
+  private _db: D1Database | null = null;
 
   /**
-   * 获取 D1 数据库实例（懒加载）
+   * 延迟获取 D1 数据库绑定
+   * 避免在构建时访问 process.env.DB
    */
-  private getDb(): D1Database {
-    if (!this.db) {
-      // 从 Cloudflare Pages 环境获取 D1 数据库绑定
+  private get db(): D1Database {
+    if (!this._db) {
       const db = (process.env as unknown as { DB: D1Database }).DB;
       
       if (!db) {
@@ -34,10 +29,13 @@ export class D1Storage implements IStorage {
         );
       }
       
-      this.db = db;
+      this._db = db;
     }
-    
-    return this.db;
+    return this._db;
+  }
+
+  constructor() {
+    // 构造函数不再立即初始化数据库,延迟到首次使用时
   }
 
   /**
@@ -66,7 +64,7 @@ export class D1Storage implements IStorage {
    */
   async getAllPrompts(): Promise<PromptItem[]> {
     try {
-      const result = await this.getDb()
+      const result = await this.db
         .prepare('SELECT * FROM prompts ORDER BY created_at DESC')
         .all<DbPromptRecord>();
       
@@ -82,7 +80,7 @@ export class D1Storage implements IStorage {
    */
   async getPromptById(id: string | number): Promise<PromptItem | null> {
     try {
-      const record = await this.getDb()
+      const record = await this.db
         .prepare('SELECT * FROM prompts WHERE id = ?')
         .bind(Number(id))
         .first<DbPromptRecord>();
@@ -104,7 +102,7 @@ export class D1Storage implements IStorage {
     try {
       const now = new Date().toISOString();
       
-      const result = await this.getDb()
+      const result = await this.db
         .prepare(`
           INSERT INTO prompts (
             title, description, prompt, category, complexity, 
@@ -189,7 +187,7 @@ export class D1Storage implements IStorage {
 
       const query = `UPDATE prompts SET ${updates.join(', ')} WHERE id = ?`;
       
-      const result = await this.getDb()
+      const result = await this.db
         .prepare(query)
         .bind(...values)
         .run();
@@ -211,7 +209,7 @@ export class D1Storage implements IStorage {
       const placeholders = ids.map(() => '?').join(',');
       const numericIds = ids.map(id => Number(id));
 
-      const result = await this.getDb()
+      const result = await this.db
         .prepare(`DELETE FROM prompts WHERE id IN (${placeholders})`)
         .bind(...numericIds)
         .run();
@@ -230,7 +228,7 @@ export class D1Storage implements IStorage {
    */
   async getUserById(id: number): Promise<DbUserRecord | null> {
     try {
-      return await this.getDb()
+      return await this.db
         .prepare('SELECT * FROM users WHERE id = ?')
         .bind(id)
         .first<DbUserRecord>();
@@ -245,7 +243,7 @@ export class D1Storage implements IStorage {
    */
   async getUserByUsername(username: string): Promise<DbUserRecord | null> {
     try {
-      return await this.getDb()
+      return await this.db
         .prepare('SELECT * FROM users WHERE username = ?')
         .bind(username)
         .first<DbUserRecord>();
@@ -266,7 +264,7 @@ export class D1Storage implements IStorage {
     try {
       const now = new Date().toISOString();
       
-      const result = await this.getDb()
+      const result = await this.db
         .prepare(`
           INSERT INTO users (username, password, role, created_at) 
           VALUES (?, ?, ?, ?)
@@ -289,7 +287,7 @@ export class D1Storage implements IStorage {
    */
   async verifyUser(username: string, password: string): Promise<DbUserRecord | null> {
     try {
-      const user = await this.getDb()
+      const user = await this.db
         .prepare('SELECT * FROM users WHERE username = ? AND password = ?')
         .bind(username, password)
         .first<DbUserRecord>();
@@ -309,7 +307,7 @@ export class D1Storage implements IStorage {
   async initializeWithStaticData(prompts: PromptItem[]): Promise<void> {
     try {
       // 检查是否已有数据
-      const existing = await this.getDb()
+      const existing = await this.db
         .prepare('SELECT COUNT(*) as count FROM prompts')
         .first<{ count: number }>();
       
