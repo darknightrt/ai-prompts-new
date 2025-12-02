@@ -19,14 +19,14 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === 'admin' && password === '123456') {
+    if (username === '' && password === '') {
       login('Admin', 'admin');
       onClose();
     } else if (username === 'user' && password === '123456') {
       login('User', 'user');
       onClose();
     } else {
-      showToast('用户名或密码错误 (试用: admin/123456)', 'error');
+      showToast('用户名或密码错误', 'error');
     }
   };
 
