@@ -178,7 +178,7 @@ export default function CreatePromptModal({ isOpen, onClose, editData }: CreateP
             )}
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300">提示词内容 (Prompt) *</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300">提示词内容</label>
               <textarea 
                 required
                 rows={4}
@@ -190,7 +190,7 @@ export default function CreatePromptModal({ isOpen, onClose, editData }: CreateP
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300">简介 (可选)</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300">简介</label>
               <textarea 
                 rows={2}
                 value={formData.desc}
