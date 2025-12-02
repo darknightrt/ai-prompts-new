@@ -12,10 +12,12 @@ let storageInstance: IStorage | null = null;
 
 /**
  * 创建存储实例（工厂模式）
+ * 注意：在构建时不会实际初始化 D1，只在运行时首次调用时初始化
  */
 function createStorage(): IStorage | null {
   switch (STORAGE_TYPE) {
     case 'd1':
+      // D1Storage 构造函数已改为延迟初始化，不会在构建时访问 DB
       return new D1Storage();
     case 'localstorage':
     default:
@@ -25,7 +27,8 @@ function createStorage(): IStorage | null {
 }
 
 /**
- * 获取存储实例
+ * 获取存储实例（懒加载）
+ * 只在实际需要时创建实例
  */
 export function getStorage(): IStorage | null {
   if (storageInstance === null && STORAGE_TYPE !== 'localstorage') {
