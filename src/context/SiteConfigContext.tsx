@@ -2,33 +2,41 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
+interface AnnouncementConfig {
+  enabled: boolean;
+  title: string;
+  content: string;
+}
+
+interface PromptsPageConfig {
+  title: string;
+  description: string;
+}
+
+interface AutoCleanupConfig {
+  enabled: boolean;
+  retentionDays: number;
+}
+
+interface UserSettingsConfig {
+  allowRegistration: boolean;
+  userCount: number;
+  autoCleanup: AutoCleanupConfig;
+}
+
+interface InviteCodeConfig {
+  enabled: boolean;
+  code: string;
+}
+
 export interface SiteConfig {
+  /*提示词管理页面有用户设置 站点设置 邀请码设置 */
   homeTitle: string;
   typewriterTexts: string[];
-  announcement: {
-    enabled: boolean;
-    title: string;
-    content: string;
-  };
-  // 提示词页面配置
-  promptsPage: {
-    title: string;
-    description: string;
-  };
-  // 用户管理配置
-  userSettings: {
-    allowRegistration: boolean;
-    userCount: number;
-    autoCleanup: {
-      enabled: boolean;
-      retentionDays: number;
-    };
-  };
-  // 站点设置 - 邀请码
-  inviteCode: {
-    enabled: boolean;
-    code: string;
-  };
+  announcement: AnnouncementConfig;
+  promptsPage: PromptsPageConfig;
+  userSettings: UserSettingsConfig;
+  inviteCode: InviteCodeConfig;
 }
 
 const DEFAULT_CONFIG: SiteConfig = {
@@ -39,10 +47,21 @@ const DEFAULT_CONFIG: SiteConfig = {
     title: "🎉 欢迎来到 PromptMaster",
     content: "这是一个全新的 AI 提示词管理平台。现在支持管理员在线编辑所有内容！"
   },
-  // 默认值匹配需求
   promptsPage: {
     title: "提示词指南",
     description: "发现复制高质量的ai提示词，高效完成你的ai创意"
+  },
+  userSettings: {
+    allowRegistration: true,
+    userCount: 0,
+    autoCleanup: {
+      enabled: false,
+      retentionDays: 30
+    }
+  },
+  inviteCode: {
+    enabled: false,
+    code: ""
   }
 };
 
@@ -66,9 +85,11 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
         // Here we ensure new fields exist even if old config is loaded
         const loadedConfig = JSON.parse(stored);
         setConfig({
-            ...DEFAULT_CONFIG,
-            ...loadedConfig,
-            promptsPage: { ...DEFAULT_CONFIG.promptsPage, ...(loadedConfig.promptsPage || {}) }
+          ...DEFAULT_CONFIG,
+          ...loadedConfig,
+          promptsPage: { ...DEFAULT_CONFIG.promptsPage, ...(loadedConfig.promptsPage || {}) },
+          userSettings: { ...DEFAULT_CONFIG.userSettings, ...(loadedConfig.userSettings || {}), autoCleanup: { ...DEFAULT_CONFIG.userSettings.autoCleanup, ...(loadedConfig.userSettings?.autoCleanup || {}) } },
+          inviteCode: { ...DEFAULT_CONFIG.inviteCode, ...(loadedConfig.inviteCode || {}) }
         });
       } catch (e) {
         console.error("Failed to load site config", e);
