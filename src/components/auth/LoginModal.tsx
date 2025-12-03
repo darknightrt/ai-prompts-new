@@ -35,8 +35,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     e.preventDefault();
     
     // 从环境变量获取管理员凭据（线上环境使用）
-    const adminUsername = process.env.NEXT_PUBLIC_ADMIN_USERNAME;
-    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+    const adminUsername = process.env.USERNAME;
+    const adminPassword = process.env.PASSWORD;
     
     // 验证登录
     if (adminUsername && adminPassword && username === adminUsername && password === adminPassword) {
