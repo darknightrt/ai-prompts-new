@@ -151,7 +151,7 @@ export default function HomePage() {
                 <p className="text-slate-900 max-w-2xl mx-auto dark:text-white">AI 不仅仅是工具，更是你的思维外骨骼。</p>
             </ScrollReveal>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <ScrollReveal className="p-8 rounded-2xl text-slate-800 dark:text-white border border-slate-700 dark:border-[#1f1f2e]">
+                <ScrollReveal className="p-8 rounded-2xl bg-slate-800 dark:text-white border border-slate-700 dark:border-[#1f1f2e]">
                     <i className="fa-solid fa-bolt text-xl text-purple-400 mb-4 block"></i>
                     <h3 className="font-bold mb-2">极速构建</h3>
                     <p className="text-sm text-gray-400">将提示词编写时间缩短 70%。</p>
