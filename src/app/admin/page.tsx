@@ -186,13 +186,11 @@ export default function AdminPage() {
             <div className="flex items-center gap-3">
               <i className="fa-solid fa-shield-halved text-3xl text-purple-600 dark:text-purple-400"></i>
               <h1 className="text-3xl font-bold text-slate-900 dark:text-white">管理员设置</h1>
-              <span className="px-3 py-1 text-xs font-bold bg-red-500 text-white rounded-full">管理员</span>
             </div>
             <button 
               onClick={handleReset}
               className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-medium shadow-lg flex items-center gap-2"
             >
-              <i className="fa-solid fa-rotate-left"></i>
               重置默认设置
             </button>
           </div>
@@ -449,3 +447,4 @@ export default function AdminPage() {
     </div>
   );
 }
+
