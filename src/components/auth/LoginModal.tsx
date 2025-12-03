@@ -12,6 +12,7 @@ interface LoginModalProps {
 
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [isRegisterMode, setIsRegisterMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -31,26 +32,42 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     setInviteCode('');
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // 从环境变量获取管理员凭据（线上环境使用）
-    const adminUsername = process.env.USERNAME;
-    const adminPassword = process.env.PASSWORD;
+    if (!username || !password) {
+      showToast('请输入用户名和密码', 'error');
+      return;
+    }
+
+    setIsLoading(true);
     
-    // 验证登录
-    if (adminUsername && adminPassword && username === adminUsername && password === adminPassword) {
-      login(username, 'admin');
-      onClose();
-      resetForm();
-    } else {
-      // 这里应该调用后端API验证用户
-      // 目前仅作为前端演示，实际应用需要后端验证
-      showToast('用户名或密码错误', 'error');
+    try {
+      // 调用登录 API
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success && data.user) {
+        login(data.user.username, data.user.role);
+        onClose();
+        resetForm();
+      } else {
+        showToast(data.error || '用户名或密码错误', 'error');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      showToast('登录失败，请稍后重试', 'error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // 检查是否允许注册
@@ -94,11 +111,31 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       }
     }
     
-    // 这里应该调用后端API注册用户
-    // 目前仅作为前端演示
-    showToast('注册成功，请登录', 'success');
-    setIsRegisterMode(false);
-    resetForm();
+    setIsLoading(true);
+    
+    try {
+      // 调用注册 API
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password, email, inviteCode })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        showToast('注册成功，请登录', 'success');
+        setIsRegisterMode(false);
+        resetForm();
+      } else {
+        showToast(data.error || '注册失败', 'error');
+      }
+    } catch (error) {
+      console.error('Register error:', error);
+      showToast('注册失败，请稍后重试', 'error');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -164,8 +201,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 />
               </div>
             )}
-            <button type="submit" className="w-full bg-purple-600 text-white py-2 rounded-lg font-bold hover:bg-purple-700 transition shadow-lg shadow-purple-500/30">
-              立即注册
+            <button 
+              type="submit" 
+              disabled={isLoading}
+              className="w-full bg-purple-600 text-white py-2 rounded-lg font-bold hover:bg-purple-700 transition shadow-lg shadow-purple-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? '注册中...' : '立即注册'}
             </button>
           </form>
         ) : (
@@ -191,8 +232,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 placeholder="请输入密码"
               />
             </div>
-            <button type="submit" className="w-full bg-purple-600 text-white py-2 rounded-lg font-bold hover:bg-purple-700 transition shadow-lg shadow-purple-500/30">
-              立即登录
+            <button 
+              type="submit" 
+              disabled={isLoading}
+              className="w-full bg-purple-600 text-white py-2 rounded-lg font-bold hover:bg-purple-700 transition shadow-lg shadow-purple-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? '登录中...' : '立即登录'}
             </button>
           </form>
         )}
