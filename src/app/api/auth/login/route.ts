@@ -42,12 +42,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // localStorage 模式：使用环境变量验证管理员
-    const adminUsername = process.env.ADMIN_USERNAME;
-    const adminPassword = process.env.ADMIN_PASSWORD;
+    // localStorage 模式：使用环境变量或默认管理员账号
+    const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+    const adminPassword = process.env.ADMIN_PASSWORD || '123789';
 
-    if (adminUsername && adminPassword && 
-        username === adminUsername && password === adminPassword) {
+    if (username === adminUsername && password === adminPassword) {
       return NextResponse.json({
         success: true,
         user: {
