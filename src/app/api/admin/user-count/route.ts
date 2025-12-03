@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStorage, DbManager } from '@/lib/db';
 import { STORAGE_TYPE } from '@/lib/storage.types';
-
+import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
 export async function GET(request: NextRequest) {
@@ -44,3 +44,4 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: '获取用户数量失败' }, { status: 500 });
   }
 }
+
