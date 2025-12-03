@@ -10,10 +10,24 @@ export interface SiteConfig {
     title: string;
     content: string;
   };
-  // 新增提示词页面配置
+  // 提示词页面配置
   promptsPage: {
     title: string;
     description: string;
+  };
+  // 用户管理配置
+  userSettings: {
+    allowRegistration: boolean;
+    userCount: number;
+    autoCleanup: {
+      enabled: boolean;
+      retentionDays: number;
+    };
+  };
+  // 站点设置 - 邀请码
+  inviteCode: {
+    enabled: boolean;
+    code: string;
   };
 }
 
