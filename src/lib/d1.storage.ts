@@ -304,21 +304,58 @@ export class D1Storage implements IStorage {
   // ==================== 初始化 ====================
 
   /**
+   * 初始化管理员账号（从环境变量）
+   * 优先级：环境变量 > SQL默认账号
+   */
+  async initializeAdminUser(): Promise<void> {
+    try {
+      const adminUsername = process.env.ADMIN_USERNAME || process.env.USERNAME;
+      const adminPassword = process.env.ADMIN_PASSWORD || process.env.PASSWORD;
+
+      // 如果没有配置环境变量，跳过（使用SQL默认账号）
+      if (!adminUsername || !adminPassword) {
+        console.log('No admin credentials in environment variables, using SQL defaults');
+        return;
+      }
+
+      // 检查管理员是否已存在
+      const existingAdmin = await this.getUserByUsername(adminUsername);
+      
+      if (existingAdmin) {
+        console.log(`Admin user '${adminUsername}' already exists`);
+        return;
+      }
+
+      // 创建环境变量配置的管理员账号
+      const newAdmin = await this.createUser(adminUsername, adminPassword, 'admin');
+      
+      if (newAdmin) {
+        console.log(`Admin user '${adminUsername}' created successfully from environment variables`);
+      }
+    } catch (error) {
+      console.error('Failed to initialize admin user:', error);
+    }
+  }
+
+  /**
    * 用静态数据初始化数据库
    */
   async initializeWithStaticData(prompts: PromptItem[]): Promise<void> {
     try {
-      // 检查是否已有数据
+      // 1. 初始化管理员账号
+      await this.initializeAdminUser();
+
+      // 2. 检查是否已有提示词数据
       const existing = await this.getDb()
         .prepare('SELECT COUNT(*) as count FROM prompts')
         .first<{ count: number }>();
       
       if (existing && existing.count > 0) {
-        console.log('Database already has data, skipping initialization');
+        console.log('Database already has data, skipping prompts initialization');
         return;
       }
 
-      // 批量插入静态数据
+      // 3. 批量插入静态数据
       for (const prompt of prompts) {
         await this.addPrompt({
           title: prompt.title,
