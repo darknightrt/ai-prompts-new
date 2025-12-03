@@ -6,7 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { STORAGE_TYPE } from '@/lib/storage.types';
-
+export const runtime = 'edge';
 // 获取所有提示词
 export async function GET() {
   try {

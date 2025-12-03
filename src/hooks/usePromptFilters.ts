@@ -9,6 +9,7 @@ interface UsePromptFiltersProps {
   complexity: Complexity | 'all';
   searchQuery: string;
   sortBy: SortOption;
+  favorites?: Set<string | number>;
 }
 
 export function usePromptFilters({
@@ -16,12 +17,19 @@ export function usePromptFilters({
   category,
   complexity,
   searchQuery,
-  sortBy
+  sortBy,
+  favorites
 }: UsePromptFiltersProps) {
   
   // 过滤逻辑
   const filteredPrompts = useMemo(() => {
     let result = prompts.filter(p => {
+      // 如果是 'custom' 分类，只显示收藏的提示词
+      if (category === 'custom') {
+        if (!favorites || favorites.size === 0) return false;
+        return favorites.has(String(p.id));
+      }
+      
       const matchCategory = category === 'all' || p.category === category;
       const matchComplexity = complexity === 'all' || (p.complexity || 'beginner') === complexity;
       const matchSearch = !searchQuery || 

@@ -7,14 +7,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "pages:build": "npx @cloudflare/next-on-pages",
-    "pages:dev": "npx wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat",
-    "pages:deploy": "npm run pages:build && npx wrangler pages deploy .vercel/output/static"
+    "pages:build": "pnpm dlx @cloudflare/next-on-pages",
+    "pages:dev": "pnpm dlx wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat",
+    "pages:deploy": "pnpm run pages:build && pnpm dlx wrangler pages deploy .vercel/output/static"
   },
+  "packageManager": "pnpm@9.14.4",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
     "clsx": "^2.1.1",
-    "next": "14.1.0",
+    "next": "14.2.30",
     "next-themes": "^0.2.1",
     "react": "^18",
     "react-dom": "^18",
@@ -27,7 +28,7 @@
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
-    "eslint-config-next": "14.1.0",
+    "eslint-config-next": "^14.0.0",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5",

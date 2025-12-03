@@ -14,4 +14,5 @@ export interface PromptItem {
   image?: string;
   isCustom?: boolean; // 区分是系统预置还是用户创建
   createdAt?: number;
+  isFavorite?: boolean; // 收藏状态
 }

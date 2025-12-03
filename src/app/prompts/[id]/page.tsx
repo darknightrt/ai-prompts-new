@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { PromptItem } from '@/lib/types';
 import Lightbox from '@/components/ui/Lightbox';
+export const runtime = 'edge';
 
 export default function PromptDetailPage({ params }: { params: { id: string } }) {
   const { prompts, isLoaded } = usePrompts();

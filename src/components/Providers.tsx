@@ -6,6 +6,7 @@ import { PromptProvider } from '../context/PromptContext';
 import { ToastProvider } from '../context/ToastContext';
 import { AuthProvider } from '../context/AuthContext';
 import { SiteConfigProvider } from '../context/SiteConfigContext';
+import { FavoritesProvider } from '../context/FavoritesContext';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -13,9 +14,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <ToastProvider>
         <SiteConfigProvider>
           <AuthProvider>
-            <PromptProvider>
-              {children}
-            </PromptProvider>
+            <FavoritesProvider>
+              <PromptProvider>
+                {children}
+              </PromptProvider>
+            </FavoritesProvider>
           </AuthProvider>
         </SiteConfigProvider>
       </ToastProvider>

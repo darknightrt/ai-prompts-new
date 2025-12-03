@@ -111,7 +111,7 @@ export default function CreatePromptModal({ isOpen, onClose, editData }: CreateP
                     <select 
                         value={formData.category}
                         onChange={e => setFormData({...formData, category: e.target.value as Category})}
-                        className="mt-1 block w-full rounded-lg border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm dark:text-white px-3 py-2"
+                        className="mt-1 block w-full rounded-lg border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm text-gray-900 dark:text-white px-3 py-2"
                     >
                         <option value="code">编程开发</option>
                         <option value="mj">Midjourney</option>
@@ -126,7 +126,7 @@ export default function CreatePromptModal({ isOpen, onClose, editData }: CreateP
                     <select 
                         value={formData.complexity}
                         onChange={e => setFormData({...formData, complexity: e.target.value as Complexity})}
-                        className="mt-1 block w-full rounded-lg border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm dark:text-white px-3 py-2"
+                        className="mt-1 block w-full rounded-lg border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm text-gray-900 dark:text-white px-3 py-2"
                     >
                         <option value="beginner">初级</option>
                         <option value="intermediate">中级</option>
@@ -178,19 +178,19 @@ export default function CreatePromptModal({ isOpen, onClose, editData }: CreateP
             )}
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300">提示词内容 (Prompt) *</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300">提示词内容</label>
               <textarea 
                 required
                 rows={4}
                 value={formData.prompt}
                 onChange={e => setFormData({...formData, prompt: e.target.value})}
-                className="mt-1 block w-full rounded-lg border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm dark:text-white px-3 py-2 font-mono text-xs" 
+                className="mt-1 block w-full rounded-lg border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm text-gray-900 dark:text-white px-3 py-2 font-mono text-xs" 
                 placeholder="在这里输入完整的 Prompt..."
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300">简介 (可选)</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300">简介</label>
               <textarea 
                 rows={2}
                 value={formData.desc}
