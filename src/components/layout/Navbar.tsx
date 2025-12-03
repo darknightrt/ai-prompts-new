@@ -5,16 +5,16 @@ import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import LoginModal from '@/components/auth/LoginModal';
-import AdminPanelModal from '@/components/admin/AdminPanelModal';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme();
   const { user, logout, isAdmin } = useAuth();
+  const router = useRouter();
   
   const [mounted, setMounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export default function Navbar() {
                             
                             {isAdmin && (
                                 <button 
-                                    onClick={() => { setIsAdminPanelOpen(true); setIsProfileOpen(false); }}
+                                    onClick={() => { router.push('/admin'); setIsProfileOpen(false); }}
                                     className="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#1f1f2e] flex items-center gap-2"
                                 >
                                     <i className="fa-solid fa-sliders text-purple-500"></i> 全局设置
