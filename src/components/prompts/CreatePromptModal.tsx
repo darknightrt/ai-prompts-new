@@ -100,7 +100,7 @@ export default function CreatePromptModal({ isOpen, onClose, editData }: CreateP
                 required 
                 value={formData.title}
                 onChange={e => setFormData({...formData, title: e.target.value})}
-                className="mt-1 block w-full rounded-lg border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm dark:text-white px-3 py-2" 
+                className="mt-1 block w-full rounded-lg border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm text-gray-900 dark:text-white px-3 py-2" 
                 placeholder="例如：SEO 优化助手"
               />
             </div>
@@ -195,7 +195,7 @@ export default function CreatePromptModal({ isOpen, onClose, editData }: CreateP
                 rows={2}
                 value={formData.desc}
                 onChange={e => setFormData({...formData, desc: e.target.value})}
-                className="mt-1 block w-full rounded-lg border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm dark:text-white px-3 py-2" 
+                className="mt-1 block w-full rounded-lg border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm text-gray-900 dark:text-white px-3 py-2" 
                 placeholder="简要描述..."
               />
             </div>
