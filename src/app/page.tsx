@@ -62,38 +62,66 @@ export default function HomePage() {
          
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Stat 1 */}
+              {/* Stat 1 */}
                 <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl opacity-20 blur-xl group-hover:opacity-30 transition duration-500"></div>
                     <div className="relative bg-white/30 dark:bg-transparent/30 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl p-8 text-center hover:transform hover:-translate-y-1 transition duration-300">
                         <div className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-2">
-                            <CountUp end={2000} suffix="个" />
+                            <CountUp end={200} suffix="个" />
                         </div>
                         <div className="text-sm font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">提示词总数</div>
                     </div>
                 </div>
-
                 {/* Stat 2 */}
                 <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl opacity-20 blur-xl group-hover:opacity-30 transition duration-500"></div>
                     <div className="relative bg-white/30 dark:bg-transparent/30 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl p-8 text-center hover:transform hover:-translate-y-1 transition duration-300">
                         <div className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-2">
-                            <CountUp end={5000} suffix="人" />
+                            <CountUp end={2} suffix="人" />
                         </div>
                         <div className="text-sm font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">活跃用户数</div>
                     </div>
                 </div>
-
                 {/* Stat 3 */}
                 <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl opacity-20 blur-xl group-hover:opacity-30 transition duration-500"></div>
                     <div className="relative bg-white/30 dark:bg-transparent/30 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl p-8 text-center hover:transform hover:-translate-y-1 transition duration-300">
                         <div className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-2">
-                            <CountUp end={10000} suffix="次" />
+                            <CountUp end={1000} suffix="次" />
                         </div>
                         <div className="text-sm font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">总使用次数</div>
                     </div>
                 </div>
+                {/* Stat 4 */}
+            <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 from-40% to-teal-500 to-60%  rounded-2xl opacity-20 blur-xl group-hover:opacity-30 transition duration-500"></div>
+                    <div className="relative bg-white/30 dark:bg-transparent/30 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl p-8 text-center hover:transform hover:-translate-y-1 transition duration-300">
+                        <div className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-2">
+                            <CountUp end={50} suffix="个" />
+                        </div>
+                        <div className="text-sm font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">工作流总数</div>
+                    </div>
+                </div>
+                {/* Stat 5 */}
+               <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-pink-500 rounded-2xl opacity-20 blur-xl group-hover:opacity-30 transition duration-500"></div>
+                    <div className="relative bg-white/30 dark:bg-transparent/30 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl p-8 text-center hover:transform hover:-translate-y-1 transition duration-300">
+                        <div className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-2">
+                            <CountUp end={20} suffix="个" />
+                        </div>
+                        <div className="text-sm font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400"> 本周提示词更新总数</div>
+                    </div>
+                    </div>
+                {/* Stat 6 */}
+               <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-teal-500 to-blue-500 rounded-2xl opacity-20 blur-xl group-hover:opacity-30 transition duration-500"></div>
+                    <div className="relative bg-white/30 dark:bg-transparent/30 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl p-8 text-center hover:transform hover:-translate-y-1 transition duration-300">
+                        <div className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-2">
+                            <CountUp end={10} suffix="个" />
+                        </div>
+                        <div className="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400"> 本周工作流更新总数</div>
+                    </div>
+                    </div>
             </ScrollReveal>
          </div>
       </section>
